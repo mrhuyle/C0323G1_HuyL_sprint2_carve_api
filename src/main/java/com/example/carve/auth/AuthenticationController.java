@@ -1,10 +1,10 @@
 package com.example.carve.auth;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +31,21 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
+            @RequestBody AuthenticationRequest request,
+            HttpServletResponse response
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+        AuthenticationResponse authenticationResponse = service.authenticate(request);
+
+        // Set refreshToken as a cookie in the response
+        Cookie refreshTokenCookie = new Cookie("refreshToken", authenticationResponse.getRefreshToken());
+        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // Set the cookie's maximum age in seconds (e.g., 7 days)
+        refreshTokenCookie.setPath("/"); // Set the cookie's path
+        refreshTokenCookie.setHttpOnly(true);
+        response.addCookie(refreshTokenCookie);
+
+        authenticationResponse.setRefreshToken("At cookie");
+
+        return ResponseEntity.ok(authenticationResponse);
     }
 
     @PostMapping("/refresh-token")

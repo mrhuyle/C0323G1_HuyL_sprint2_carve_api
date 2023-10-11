@@ -2,10 +2,7 @@ package com.example.carve.user;
 
 import com.example.carve.token.Token;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +27,8 @@ public class User implements UserDetails {
     private String email;
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
+
+    @ToString.Exclude
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 

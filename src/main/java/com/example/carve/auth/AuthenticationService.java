@@ -7,6 +7,7 @@ import com.example.carve.token.repository.TokenRepository;
 import com.example.carve.user.User;
 import com.example.carve.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,7 @@ public class AuthenticationService {
 
     private void revokeAllUserTokens (User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        System.out.println("__________Valid user tokens: ____"+validUserTokens);
         if (validUserTokens.isEmpty()) {
             return;
         }
@@ -99,23 +101,38 @@ public class AuthenticationService {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
+        Cookie[] cookies = request.getCookies();
+        String refreshToken = null;
         final String username;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (cookies == null) {
+            return;
+        } else {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("refreshToken")) {
+                    refreshToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if (refreshToken == null) {
             return;
         }
-        refreshToken = authHeader.substring(7);
         username = jwtService.extractUsername(refreshToken); //extract username
         if (username != null) {
             var user = this.userService.getUser(username);
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
+                System.out.println("_______________Revoke___________");
                 saveUserToken(user, accessToken);
+                Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+                refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // Set the cookie's maximum age in seconds (e.g., 7 days)
+                refreshTokenCookie.setPath("/"); // Set the cookie's path
+                refreshTokenCookie.setHttpOnly(true);
+                response.addCookie(refreshTokenCookie);
                 var authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
-                        .refreshToken(refreshToken)
+                        .refreshToken("At cookie")
                         .errMsg("Refresh successfully")
                         .build();
                 new ObjectMapper().writeValue(response.getOutputStream(),authResponse);
