@@ -1,13 +1,12 @@
 package com.example.carve.auth;
 
 import com.example.carve.config.JwtService;
+import com.example.carve.token.Token;
+import com.example.carve.token.TokenType;
+import com.example.carve.token.repository.TokenRepository;
 import com.example.carve.user.User;
-import com.example.carve.user.repository.RoleRepository;
-import com.example.carve.user.repository.UserRepository;
 import com.example.carve.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +19,7 @@ import java.util.Collections;
 public class AuthenticationService {
 
     private final UserService userService;
+    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -27,7 +27,7 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         if (userService.getUser(request.getUsername()) != null) {
             return AuthenticationResponse.builder()
-                    .token(null)
+                    .accessToken(null)
                     .errMsg("Existed username")
                     .build();
         }
@@ -38,10 +38,12 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(Collections.singletonList(userService.findRoleByName(request.getRoles().get(0))))
                 .build();
-        userService.saveUser(user);
+        var savedUser = userService.saveUser(user);
         var jwtToken = jwtService.generateToken(user);
+        saveUserToken(savedUser, jwtToken);
+        var refreshToken = jwtService.generateRefreshToken(user);
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .accessToken(jwtToken)
                 .errMsg(null)
                 .build();
     }
@@ -52,8 +54,33 @@ public class AuthenticationService {
         );
         User user = userService.getUser(request.getUsername());
         var jwtToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .accessToken(jwtToken)
                 .build();
+    }
+
+    private void revokeAllUserTokens (User user) {
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        if (validUserTokens.isEmpty()) {
+            return;
+        }
+        validUserTokens.forEach(t -> {
+            t.setExpired(true);
+            t.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
+    }
+
+    private void saveUserToken(User user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
     }
 }
