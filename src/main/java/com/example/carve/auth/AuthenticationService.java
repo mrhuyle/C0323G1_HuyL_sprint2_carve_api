@@ -1,23 +1,19 @@
 package com.example.carve.auth;
 
 import com.example.carve.config.JwtService;
-import com.example.carve.token.Token;
-import com.example.carve.token.TokenType;
+import com.example.carve.token.model.Token;
+import com.example.carve.token.model.TokenType;
 import com.example.carve.token.repository.TokenRepository;
-import com.example.carve.user.User;
+import com.example.carve.user.model.User;
 import com.example.carve.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

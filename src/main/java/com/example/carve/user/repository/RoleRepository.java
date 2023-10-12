@@ -1,6 +1,6 @@
 package com.example.carve.user.repository;
 
-import com.example.carve.user.Role;
+import com.example.carve.user.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {

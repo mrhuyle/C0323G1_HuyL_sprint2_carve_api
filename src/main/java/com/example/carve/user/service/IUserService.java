@@ -1,7 +1,7 @@
 package com.example.carve.user.service;
 
-import com.example.carve.user.Role;
-import com.example.carve.user.User;
+import com.example.carve.user.model.Role;
+import com.example.carve.user.model.User;
 
 import java.util.List;
 

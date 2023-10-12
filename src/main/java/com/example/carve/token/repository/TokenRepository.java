@@ -1,6 +1,6 @@
 package com.example.carve.token.repository;
 
-import com.example.carve.token.Token;
+import com.example.carve.token.model.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

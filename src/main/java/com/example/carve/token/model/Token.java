@@ -1,6 +1,6 @@
-package com.example.carve.token;
+package com.example.carve.token.model;
 
-import com.example.carve.user.User;
+import com.example.carve.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +11,7 @@ import lombok.*;
 @Entity
 public class Token {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
     @Column(unique = true)
@@ -23,7 +23,6 @@ public class Token {
     public boolean revoked;
 
     public boolean expired;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

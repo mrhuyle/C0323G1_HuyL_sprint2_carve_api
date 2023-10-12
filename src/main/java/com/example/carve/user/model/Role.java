@@ -1,4 +1,4 @@
-package com.example.carve.user;
+package com.example.carve.user.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
