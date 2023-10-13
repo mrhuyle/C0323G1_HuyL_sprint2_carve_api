@@ -31,10 +31,15 @@ public class Deck {
 
     private float promoPercent;
 
+    @Column(columnDefinition = "TEXT")
     private String img;
 
+    private boolean isProduct;
+
+    @Column(columnDefinition = "TIMESTAMP")
     private Timestamp createdTime;
 
+    @Column(columnDefinition = "TIMESTAMP")
     private Timestamp updatedTime;
 
     @Column(columnDefinition = "BIT(1) DEFAULT 0")

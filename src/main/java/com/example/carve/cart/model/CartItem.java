@@ -32,5 +32,6 @@ public class CartItem {
 
     private Long price;  // Price of the deck in this cart
 
+    @Column(columnDefinition = "BIT(1) DEFAULT 0")
     private boolean isBought;
 }
