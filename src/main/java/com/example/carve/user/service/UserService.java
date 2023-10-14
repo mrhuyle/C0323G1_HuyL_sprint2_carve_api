@@ -1,14 +1,20 @@
 package com.example.carve.user.service;
 
+import com.example.carve.cart.model.service.ICartService;
+import com.example.carve.user.dto.ChangePasswordRequest;
+import com.example.carve.user.dto.UserDTO;
 import com.example.carve.user.model.Role;
 import com.example.carve.user.model.User;
 import com.example.carve.user.repository.RoleRepository;
 import com.example.carve.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -18,10 +24,13 @@ import java.util.List;
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ICartService cartService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User saveUser(User user) {
         log.info("Saving new user {} to the database", user.getName());
+        cartService.createCart(user);
         return userRepository.save(user);
     }
 
@@ -54,5 +63,27 @@ public class UserService implements IUserService {
     public List<User> getUsers() {
         log.info("Fetching all users");
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserDTO getUserInformation(String username) {
+        return userRepository.findByUsernameWithRank(username);
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        // Check the current password is correct
+        if (!passwordEncoder.matches(request.getCurrentPassword(),user.getPassword())) {
+            throw new IllegalStateException("Wrong password");
+        }
+        // Check the new pass and confirmation pass are the same
+        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
+            throw new IllegalStateException("Password are not the same");
+        }
+        //Set new pass
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

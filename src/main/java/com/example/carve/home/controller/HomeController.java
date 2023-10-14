@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/api/home")
 @CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class HomeController {

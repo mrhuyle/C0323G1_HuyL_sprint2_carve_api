@@ -1,8 +1,11 @@
 package com.example.carve.user.service;
 
+import com.example.carve.user.dto.ChangePasswordRequest;
+import com.example.carve.user.dto.UserDTO;
 import com.example.carve.user.model.Role;
 import com.example.carve.user.model.User;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface IUserService {
@@ -12,4 +15,9 @@ public interface IUserService {
     void addRoleToUser(String username, String roleName);
     User getUser(String username);
     List<User> getUsers();
+
+    UserDTO getUserInformation(String username); //Get information of user for front-end
+
+
+    void changePassword(ChangePasswordRequest request, Principal connectedUser);
 }

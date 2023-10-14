@@ -40,6 +40,7 @@ public class AuthenticationService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .username(request.getUsername())
+                .img("/src/assets/img/user_img.webp")
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(Collections.singletonList(userService.findRoleByName(request.getRoles().get(0))))
                 .build();

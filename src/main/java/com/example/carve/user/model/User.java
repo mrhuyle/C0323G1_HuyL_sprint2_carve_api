@@ -28,6 +28,9 @@ public class User implements UserDetails {
     private String password;
     private String email;
 
+    @Column(columnDefinition = "VARCHAR(2083) DEFAULT '/src/assets/img/user_img.webp' ")
+    private String img;
+
     @Column(columnDefinition = "BIT(1) DEFAULT 0")
     private boolean isDeleted;
 
@@ -35,8 +38,12 @@ public class User implements UserDetails {
     private Collection<Role> roles = new ArrayList<>();
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Token> tokens;
+
+    @ManyToOne
+    @JoinColumn(name = "rank_id")
+    private RankUser rank;
 
     @ManyToMany
     @JoinTable(
