@@ -67,5 +67,4 @@ public class UserController {
         userService.changePassword(request, connectedUser);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
