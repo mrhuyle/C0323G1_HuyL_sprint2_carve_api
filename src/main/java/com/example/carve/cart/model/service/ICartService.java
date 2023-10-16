@@ -9,4 +9,6 @@ public interface ICartService {
     void createCart(User user);
 
     List<CartItemDTO> getCartItemsByUsername(String username);
+
+    void deleteCartItemById(Long id);
 }

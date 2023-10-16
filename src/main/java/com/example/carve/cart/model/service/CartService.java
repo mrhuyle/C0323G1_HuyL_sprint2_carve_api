@@ -34,4 +34,9 @@ public class CartService implements ICartService {
     public List<CartItemDTO> getCartItemsByUsername(String username) {
         return cartItemRepository.findCartItemsByUsername(username);
     }
+
+    @Override
+    public void deleteCartItemById(Long id) {
+        cartItemRepository.deleteById(id);
+    }
 }

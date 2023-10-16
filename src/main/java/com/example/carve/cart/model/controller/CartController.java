@@ -24,4 +24,15 @@ public class CartController {
         }
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete-item")
+    public ResponseEntity<?> deleteCartItemById(@RequestParam Long id) {
+        System.out.println(id);
+        try {
+            cartService.deleteCartItemById(id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
 }

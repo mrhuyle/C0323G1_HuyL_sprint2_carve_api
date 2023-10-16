@@ -45,7 +45,7 @@ public class Deck {
     @Column(columnDefinition = "BIT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "deck_tag",
             joinColumns = @JoinColumn(name = "deck_id"),
