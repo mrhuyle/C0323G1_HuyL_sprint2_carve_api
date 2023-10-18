@@ -30,7 +30,7 @@ public class CartItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private Long price;  // Price of the deck in this cart
+    private Long price;
 
     @Column(columnDefinition = "BIT(1) DEFAULT 0")
     private boolean isBought;

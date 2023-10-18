@@ -1,4 +1,4 @@
-package com.example.carve.cart.model.dto;
+package com.example.carve.cart.dto;
 
 public interface CartItemDTO {
     Long getUserId();
@@ -11,4 +11,5 @@ public interface CartItemDTO {
     Long getDeckPrice();
     float getPromoPercent();
     float getDiscount();
+    String getOrderCode();
 }

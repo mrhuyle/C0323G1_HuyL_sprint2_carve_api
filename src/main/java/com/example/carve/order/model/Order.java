@@ -31,7 +31,8 @@ public class Order {
 
     private boolean paid;
 
-    private Timestamp isCreated;
+    @Column(columnDefinition = "TIMESTAMP")
+    private Timestamp createdTime;
 
     @ManyToOne
     @JoinColumn(name = "cart_id")

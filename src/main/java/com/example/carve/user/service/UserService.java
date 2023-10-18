@@ -1,6 +1,6 @@
 package com.example.carve.user.service;
 
-import com.example.carve.cart.model.service.ICartService;
+import com.example.carve.cart.service.ICartService;
 import com.example.carve.user.dto.ChangePasswordRequest;
 import com.example.carve.user.dto.UserDTO;
 import com.example.carve.user.model.Role;
