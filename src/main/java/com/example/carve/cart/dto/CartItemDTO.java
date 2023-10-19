@@ -1,5 +1,7 @@
 package com.example.carve.cart.dto;
 
+import java.sql.Timestamp;
+
 public interface CartItemDTO {
     Long getUserId();
     String getUsername();
@@ -12,4 +14,5 @@ public interface CartItemDTO {
     float getPromoPercent();
     float getDiscount();
     String getOrderCode();
+    Timestamp getCreatedTime();
 }

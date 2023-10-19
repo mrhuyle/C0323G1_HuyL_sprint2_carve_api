@@ -86,4 +86,14 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
+
+    @Override
+    public boolean saveImg(String username, String img) {
+        var user = userRepository.findByUsername(username);
+        if (user != null) {
+            user.setImg(img);
+            return true;
+        }
+        return false;
+    }
 }

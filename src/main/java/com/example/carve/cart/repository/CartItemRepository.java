@@ -51,6 +51,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "    d.price AS deckPrice,\n" +
             "    d.promo_percent AS promoPercent,\n" +
             "    o.code AS orderCode, " +
+            "    o.created_time AS createdTime, " +
             "    r.discount " +
             "FROM\n" +
             "    cart_item ci\n" +

@@ -67,4 +67,14 @@ public class UserController {
         userService.changePassword(request, connectedUser);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/user/save-img")
+    public ResponseEntity<?> saveImg(@RequestBody UsernameImgRequest request) {
+        System.out.println("-----------Save Img--------");
+        if (userService.saveImg(request.getUsername(), request.getImg())) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
 }
