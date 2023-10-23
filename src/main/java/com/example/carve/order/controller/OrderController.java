@@ -1,6 +1,5 @@
 package com.example.carve.order.controller;
 
-import com.example.carve.order.dto.OrderItemDTO;
 import com.example.carve.order.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

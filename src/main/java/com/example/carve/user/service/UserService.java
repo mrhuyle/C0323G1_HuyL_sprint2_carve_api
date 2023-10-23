@@ -5,6 +5,7 @@ import com.example.carve.user.dto.ChangePasswordRequest;
 import com.example.carve.user.dto.UserDTO;
 import com.example.carve.user.model.Role;
 import com.example.carve.user.model.User;
+import com.example.carve.user.repository.RankUserRepository;
 import com.example.carve.user.repository.RoleRepository;
 import com.example.carve.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,13 @@ public class UserService implements IUserService {
     private final RoleRepository roleRepository;
     private final ICartService cartService;
     private final PasswordEncoder passwordEncoder;
+    private final RankUserRepository rankUserRepository;
 
     @Override
     public User saveUser(User user) {
         log.info("Saving new user {} to the database", user.getName());
         cartService.createCart(user);
+        user.setRank(rankUserRepository.findById(1L).get());
         return userRepository.save(user);
     }
 

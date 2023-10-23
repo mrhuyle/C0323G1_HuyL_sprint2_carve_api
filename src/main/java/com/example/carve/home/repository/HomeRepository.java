@@ -12,7 +12,8 @@ import java.util.List;
 public interface HomeRepository extends JpaRepository<Deck, Long> {
     @Query(value = " SELECT d.id as id, d.name as name, d.description as description,\n" +
             "            d.price as price, d.promo_percent as promoPercent, d.img as img,\n" +
-            "            t.name as tagName\n" +
+            "            t.name as tagName, " +
+            "            d.created_time as createdTime " +
             "            FROM deck d\n" +
             "            JOIN tag t\n" +
             "            WHERE d.is_deleted = false AND d.is_product = true " +
