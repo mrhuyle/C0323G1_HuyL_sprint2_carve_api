@@ -34,6 +34,9 @@ public class Order {
     @Column(columnDefinition = "TIMESTAMP")
     private Timestamp createdTime;
 
+    @Column(columnDefinition = "VARCHAR (2084)")
+    private String invoice;
+
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;

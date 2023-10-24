@@ -4,6 +4,7 @@ import com.example.carve.order.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -21,5 +22,14 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.CREATED).body(orderId);
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    @PostMapping("/save-invoice")
+    public ResponseEntity<?> saveInvoice(@RequestBody SaveInvoiceRequest request) {
+        if (orderService.saveInvoice(request)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error save invoice");
+        }
     }
 }

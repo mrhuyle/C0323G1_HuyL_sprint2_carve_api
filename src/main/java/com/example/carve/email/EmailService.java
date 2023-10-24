@@ -1,5 +1,6 @@
 package com.example.carve.email;
 
+import com.example.carve.order.repository.OrderRepository;
 import com.example.carve.user.repository.UserRepository;
 import freemarker.core.ParseException;
 import freemarker.template.MalformedTemplateNameException;
@@ -21,12 +22,15 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService implements IEmailService {
     private final JavaMailSender javaMailSender;
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
     private final FreeMarkerConfigurer freemarkerConfigurer;
 
     @Value("${spring.mail.username}")
@@ -94,10 +98,16 @@ public class EmailService implements IEmailService {
     @Override
     public String sendMessageUsingFreemarkerTemplate(EmailDetails details) {
         try {
-            Template freemarkerTemplate = freemarkerConfigurer.getConfiguration().getTemplate("template-freemarker.ftl");
-            String htmlBody = FreeMarkerTemplateUtils.processTemplateIntoString(freemarkerTemplate, details.getTemplateModel());
             String userEmail = userRepository.findByUsername(details.getUsername()).getEmail();
             String subject = details.getSubject();
+            String invoice = orderRepository.findById(details.getOrderId()).get().getInvoice();
+            System.out.println("________Invoice: " + invoice);
+            Map<String, Object> templateModel = new HashMap<>();
+            templateModel.put("invoice", invoice);
+            templateModel.put("username", details.getUsername());
+            Template freemarkerTemplate = freemarkerConfigurer.getConfiguration().getTemplate("template-freemarker.ftl");
+            String htmlBody = FreeMarkerTemplateUtils.processTemplateIntoString(freemarkerTemplate, templateModel);
+
             sendHtmlMessage(userEmail, subject, htmlBody);
             return "Success";
         } catch (Exception e) {

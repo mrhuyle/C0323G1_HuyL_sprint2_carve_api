@@ -13,6 +13,6 @@ public class EmailDetails {
     private String username;
     private String msgBody;
     private String subject;
+    private Long orderId;
     private String attachment;
-    private Map<String, Object> templateModel;
 }

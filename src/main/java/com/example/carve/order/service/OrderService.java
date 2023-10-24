@@ -4,6 +4,7 @@ import com.example.carve.cart.model.CartItem;
 import com.example.carve.cart.repository.CartItemRepository;
 import com.example.carve.cart.repository.CartRepository;
 import com.example.carve.order.controller.CreateOrderRequest;
+import com.example.carve.order.controller.SaveInvoiceRequest;
 import com.example.carve.order.model.Order;
 import com.example.carve.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,5 +60,15 @@ public class OrderService implements IOrderService {
             }
         }
         return savedOrder.getId();
+    }
+
+    @Override
+    public boolean saveInvoice(SaveInvoiceRequest request) {
+        var order = orderRepository.findById(request.getOrderId());
+        if (order.isPresent()) {
+            order.get().setInvoice(request.getInvoiceLink());
+            return true;
+        }
+        return false;
     }
 }
