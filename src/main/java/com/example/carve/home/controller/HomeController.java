@@ -28,4 +28,16 @@ public class HomeController {
         }
         return new ResponseEntity<>(decks, HttpStatus.OK);
     }
+
+    @GetMapping("/get-detail")
+    public ResponseEntity<DeckForHomePageDTO> getDeckDetail(
+            @RequestParam Long id
+    ) {
+        DeckForHomePageDTO deck = homeService.getDeckDetail(id);
+        if (deck == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(deck, HttpStatus.OK);
+        }
+    }
 }

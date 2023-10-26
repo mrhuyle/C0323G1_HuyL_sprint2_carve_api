@@ -19,4 +19,9 @@ public class HomeService implements IHomeService {
         String tagParam = '%' + tag + '%';
         return homeRepository.findLatestDecksForHomePage(keywordParam, tagParam);
     }
+
+    @Override
+    public DeckForHomePageDTO getDeckDetail(Long id) {
+        return homeRepository.getDeckDetail(id);
+    }
 }

@@ -5,20 +5,32 @@ import com.example.carve.home.dto.DeckForHomePageDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 public interface HomeRepository extends JpaRepository<Deck, Long> {
     @Query(value = " SELECT d.id as id, d.name as name, d.description as description,\n" +
             "            d.price as price, d.promo_percent as promoPercent, d.img as img,\n" +
-            "            t.name as tagName, " +
+            "            JSON_ARRAYAGG(t.name) AS tagName, " +
             "            d.created_time as createdTime " +
-            "            FROM deck d\n" +
-            "            JOIN tag t\n" +
-            "            WHERE d.is_deleted = false AND d.is_product = true " +
+            "           FROM deck d " +
+            "           LEFT JOIN deck_tag dt ON d.id = dt.deck_id " +
+            "           LEFT JOIN tag t ON dt.tag_id = t.id " +
+            "           WHERE d.is_deleted = false AND d.is_product = true " +
             "           AND d.name LIKE :keyword " +
             "           AND t.name LIKE :tag " +
-            "            ORDER BY d.created_time DESC ", nativeQuery = true)
+            "           GROUP BY d.id " +
+            "           ORDER BY d.created_time DESC ", nativeQuery = true)
     List<DeckForHomePageDTO> findLatestDecksForHomePage(@Param("keyword") String keyword, @Param("tag") String tag);
+
+    @Query(value = " SELECT d.id as id, d.name as name, d.description as description,\n" +
+            "            d.price as price, d.promo_percent as promoPercent, d.img as img,\n" +
+            "            JSON_ARRAYAGG(t.name) AS tagName, " +
+            "            d.created_time as createdTime " +
+            "           FROM deck d " +
+            "           LEFT JOIN deck_tag dt ON d.id = dt.deck_id " +
+            "           LEFT JOIN tag t ON dt.tag_id = t.id " +
+            "            WHERE d.is_deleted = false AND d.is_product = true " +
+            "           AND d.id = :id " , nativeQuery = true)
+    DeckForHomePageDTO getDeckDetail(@Param("id") Long id);
 }

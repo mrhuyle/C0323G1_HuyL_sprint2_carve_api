@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IHomeService {
     List<DeckForHomePageDTO> findLatestDecksForHomePage(String keyword, String tag);
+
+    DeckForHomePageDTO getDeckDetail(Long id);
 }
