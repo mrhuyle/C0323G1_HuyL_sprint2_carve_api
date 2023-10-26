@@ -58,5 +58,4 @@ public class Deck {
 
     @ManyToMany(mappedBy = "decks")
     private Set<User> users;
-
 }
