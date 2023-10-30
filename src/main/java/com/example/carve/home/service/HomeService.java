@@ -3,6 +3,8 @@ package com.example.carve.home.service;
 import com.example.carve.home.dto.DeckForHomePageDTO;
 import com.example.carve.home.repository.HomeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,5 +25,11 @@ public class HomeService implements IHomeService {
     @Override
     public DeckForHomePageDTO getDeckDetail(Long id) {
         return homeRepository.getDeckDetail(id);
+    }
+
+    @Override
+    public Page<DeckForHomePageDTO> getListWithPagination(String keyword, Pageable pageable) {
+        String keywordParam = "%" + keyword + "%";
+        return homeRepository.getListWithPagination(keywordParam, pageable);
     }
 }

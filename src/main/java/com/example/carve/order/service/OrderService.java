@@ -5,6 +5,7 @@ import com.example.carve.cart.repository.CartItemRepository;
 import com.example.carve.cart.repository.CartRepository;
 import com.example.carve.order.controller.CreateOrderRequest;
 import com.example.carve.order.controller.SaveInvoiceRequest;
+import com.example.carve.order.dto.OrderListDTO;
 import com.example.carve.order.model.Order;
 import com.example.carve.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -70,5 +71,10 @@ public class OrderService implements IOrderService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<OrderListDTO> findOrders() {
+        return orderRepository.findOrders();
     }
 }

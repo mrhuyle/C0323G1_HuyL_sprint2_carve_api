@@ -2,6 +2,8 @@ package com.example.carve.home.repository;
 
 import com.example.carve.deck.model.Deck;
 import com.example.carve.home.dto.DeckForHomePageDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,6 +33,19 @@ public interface HomeRepository extends JpaRepository<Deck, Long> {
             "           LEFT JOIN deck_tag dt ON d.id = dt.deck_id " +
             "           LEFT JOIN tag t ON dt.tag_id = t.id " +
             "            WHERE d.is_deleted = false AND d.is_product = true " +
-            "           AND d.id = :id " , nativeQuery = true)
+            "           AND d.id = :id ", nativeQuery = true)
     DeckForHomePageDTO getDeckDetail(@Param("id") Long id);
+
+    @Query(value = " SELECT d.id as id, d.name as name, d.description as description,\n" +
+            "            d.price as price, d.promo_percent as promoPercent, d.img as img,\n" +
+            "            JSON_ARRAYAGG(t.name) AS tagName, " +
+            "            d.created_time as createdTime " +
+            "           FROM deck d " +
+            "           LEFT JOIN deck_tag dt ON d.id = dt.deck_id " +
+            "           LEFT JOIN tag t ON dt.tag_id = t.id " +
+            "           WHERE d.is_deleted = false AND d.is_product = true " +
+            "           AND d.name LIKE :keyword " +
+            "           OR t.name LIKE :keyword " +
+            "           GROUP BY d.id ", nativeQuery = true)
+    Page<DeckForHomePageDTO> getListWithPagination(@Param("keyword") String keyword, Pageable pageable);
 }
