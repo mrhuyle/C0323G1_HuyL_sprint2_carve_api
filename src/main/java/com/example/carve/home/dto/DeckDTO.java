@@ -2,7 +2,7 @@ package com.example.carve.home.dto;
 
 import java.sql.Timestamp;
 
-public interface DeckForHomePageDTO {
+public interface DeckDTO {
     Long getId();
 
     String getName();

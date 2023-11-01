@@ -2,6 +2,7 @@ package com.example.carve.deck.controller;
 
 import com.example.carve.deck.service.IDeckService;
 import com.example.carve.deck.service.ITagService;
+import com.example.carve.home.dto.DeckDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,25 @@ public class DeckController {
     public ResponseEntity<?> createDeck(@RequestBody CreateDeckRequest request) {
         if (deckService.createDeck(request)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @GetMapping("/get-deck")
+    public ResponseEntity<DeckDTO> getDeck(@RequestParam Long id) {
+        DeckDTO deck = deckService.getDeck(id);
+        if (deck == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(deck, HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/edit-deck")
+    public ResponseEntity<?> editDeck (@RequestBody CreateDeckRequest request, @RequestParam Long id) {
+        if (deckService.editDeck(request, id)) {
+            return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

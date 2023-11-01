@@ -3,16 +3,14 @@ package com.example.carve.deck.model;
 import com.example.carve.cart.model.CartItem;
 import com.example.carve.user.model.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -51,6 +49,7 @@ public class Deck {
             joinColumns = @JoinColumn(name = "deck_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @ToString.Exclude
     private Set<Tag> tags;
 
     @OneToMany(mappedBy = "deck")

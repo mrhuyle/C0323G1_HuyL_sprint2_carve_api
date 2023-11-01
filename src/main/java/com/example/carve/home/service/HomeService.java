@@ -1,6 +1,6 @@
 package com.example.carve.home.service;
 
-import com.example.carve.home.dto.DeckForHomePageDTO;
+import com.example.carve.home.dto.DeckDTO;
 import com.example.carve.home.repository.HomeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,19 +16,19 @@ public class HomeService implements IHomeService {
     private final HomeRepository homeRepository;
 
     @Override
-    public List<DeckForHomePageDTO> findLatestDecksForHomePage(String keyword, String tag) {
+    public List<DeckDTO> findLatestDecksForHomePage(String keyword, String tag) {
         String keywordParam = '%' + keyword + '%';
         String tagParam = '%' + tag + '%';
         return homeRepository.findLatestDecksForHomePage(keywordParam, tagParam);
     }
 
     @Override
-    public DeckForHomePageDTO getDeckDetail(Long id) {
+    public DeckDTO getDeckDetail(Long id) {
         return homeRepository.getDeckDetail(id);
     }
 
     @Override
-    public Page<DeckForHomePageDTO> getListWithPagination(String keyword, Pageable pageable) {
+    public Page<DeckDTO> getListWithPagination(String keyword, Pageable pageable) {
         String keywordParam = "%" + keyword + "%";
         return homeRepository.getListWithPagination(keywordParam, pageable);
     }

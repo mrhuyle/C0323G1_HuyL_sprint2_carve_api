@@ -1,9 +1,5 @@
 package com.example.carve.deck.controller;
 
-import com.example.carve.cart.model.CartItem;
-import com.example.carve.deck.model.Tag;
-import com.example.carve.user.model.User;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.example.carve.home.controller;
 
-import com.example.carve.home.dto.DeckForHomePageDTO;
+import com.example.carve.home.dto.DeckDTO;
 import com.example.carve.home.service.IHomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,11 +22,11 @@ public class HomeController {
     private final IHomeService homeService;
 
     @GetMapping("/get-latest-decks")
-    public ResponseEntity<List<DeckForHomePageDTO>> findLatestDecksForHomePage(
+    public ResponseEntity<List<DeckDTO>> findLatestDecksForHomePage(
             @RequestParam(defaultValue = "", required = false) String keyword,
             @RequestParam(defaultValue = "", required = false) String tag
     ) {
-        List<DeckForHomePageDTO> decks = homeService.findLatestDecksForHomePage(keyword, tag);
+        List<DeckDTO> decks = homeService.findLatestDecksForHomePage(keyword, tag);
         if (decks.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -34,10 +34,10 @@ public class HomeController {
     }
 
     @GetMapping("/get-detail")
-    public ResponseEntity<DeckForHomePageDTO> getDeckDetail(
+    public ResponseEntity<DeckDTO> getDeckDetail(
             @RequestParam Long id
     ) {
-        DeckForHomePageDTO deck = homeService.getDeckDetail(id);
+        DeckDTO deck = homeService.getDeckDetail(id);
         if (deck == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -46,7 +46,7 @@ public class HomeController {
     }
 
     @GetMapping("/get-list-pagination")
-    public ResponseEntity<Page<DeckForHomePageDTO>> getListWithPagination(
+    public ResponseEntity<Page<DeckDTO>> getListWithPagination(
             @RequestParam(defaultValue = "0", required = false) Integer page,
             @RequestParam(defaultValue = "10", required = false) Integer limit,
             @RequestParam(defaultValue = "", required = false) String keyword,
@@ -55,7 +55,7 @@ public class HomeController {
     ) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         Pageable pageable = PageRequest.of(page, limit, sort);
-        Page<DeckForHomePageDTO> decks = homeService.getListWithPagination(keyword, pageable);
+        Page<DeckDTO> decks = homeService.getListWithPagination(keyword, pageable);
         if (decks.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

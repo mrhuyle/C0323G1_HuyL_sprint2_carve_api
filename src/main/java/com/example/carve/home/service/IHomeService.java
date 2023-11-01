@@ -1,15 +1,15 @@
 package com.example.carve.home.service;
 
-import com.example.carve.home.dto.DeckForHomePageDTO;
+import com.example.carve.home.dto.DeckDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface IHomeService {
-    List<DeckForHomePageDTO> findLatestDecksForHomePage(String keyword, String tag);
+    List<DeckDTO> findLatestDecksForHomePage(String keyword, String tag);
 
-    DeckForHomePageDTO getDeckDetail(Long id);
+    DeckDTO getDeckDetail(Long id);
 
-    Page<DeckForHomePageDTO> getListWithPagination(String keyword, Pageable pageable);
+    Page<DeckDTO> getListWithPagination(String keyword, Pageable pageable);
 }
