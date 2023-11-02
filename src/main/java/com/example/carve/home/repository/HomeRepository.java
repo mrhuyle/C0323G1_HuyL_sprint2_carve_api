@@ -20,7 +20,7 @@ public interface HomeRepository extends JpaRepository<Deck, Long> {
             "           LEFT JOIN tag t ON dt.tag_id = t.id " +
             "           WHERE d.is_deleted = false AND d.is_product = true " +
             "           AND d.name LIKE :keyword " +
-            "           AND t.name LIKE :tag " +
+            "           AND (t.name LIKE :tag OR t.name IS NULL) " +
             "           GROUP BY d.id " +
             "           ORDER BY d.created_time DESC ", nativeQuery = true)
     List<DeckDTO> findLatestDecksForHomePage(@Param("keyword") String keyword, @Param("tag") String tag);
