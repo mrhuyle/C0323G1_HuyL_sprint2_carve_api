@@ -37,11 +37,20 @@ public class OrderController {
     }
 
     @GetMapping("/get-orders")
-    public ResponseEntity<List<OrderListDTO>> getOrders () {
+    public ResponseEntity<List<OrderListDTO>> getOrders() {
         var ordersList = orderService.findOrders();
         if (ordersList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.ok(ordersList);
+    }
+
+    @PostMapping("/set-had-bought")
+    public ResponseEntity<?> setOrderToBought(Long id) {
+        if (orderService.setOrderToBought(id)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }

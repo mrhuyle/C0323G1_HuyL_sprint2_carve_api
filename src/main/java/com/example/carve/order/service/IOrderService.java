@@ -12,4 +12,6 @@ public interface IOrderService {
     public boolean saveInvoice(SaveInvoiceRequest request);
 
     List<OrderListDTO> findOrders();
+
+    boolean setOrderToBought(Long id);
 }

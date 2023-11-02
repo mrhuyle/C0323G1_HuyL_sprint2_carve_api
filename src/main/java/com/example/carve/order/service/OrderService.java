@@ -47,7 +47,6 @@ public class OrderService implements IOrderService {
                 .paid(false)
                 .discount(request.getDiscount())
                 .total(request.getTotal())
-                .createdTime(Timestamp.from(Instant.now()))
                 .build();
         var savedOrder = saveOrder(newOrder); //set format code here
         List<Long> listCartItemIds = request.getListCartItemIds();
@@ -76,5 +75,17 @@ public class OrderService implements IOrderService {
     @Override
     public List<OrderListDTO> findOrders() {
         return orderRepository.findOrders();
+    }
+
+    @Override
+    public boolean setOrderToBought(Long id) {
+        var order = orderRepository.findById(id);
+        if (order.isPresent()) {
+            order.get().setPaid(true);
+            order.get().setCreatedTime(Timestamp.from(Instant.now()));
+            orderRepository.save(order.get());
+            return true;
+        }
+        return false;
     }
 }
